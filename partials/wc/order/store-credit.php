@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$action_url = WCSC_Helper::trim_string( ['action_url'] ?? '' );
+$action_url = WCSC_Helper::trim_string( $args['action_url'] ?? '' );
 $nonce      = WCSC_Helper::trim_string( $args['nonce'] ?? '' );
 $order_id   = absint( $args['order_id'] ?? 0 );
 
-if ( ! $action_url || ! $nonce || ! $order_id ) {
+if ( ! $nonce || ! $order_id ) {
     return;
 }
 ?>

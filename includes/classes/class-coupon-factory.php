@@ -50,6 +50,13 @@ class WCSC_Coupon_Factory {
 		$coupon->add_meta_data( self::SOURCE_ORDER_META_KEY, $order->get_id(), true );
 		$coupon_id = $coupon->save();
 
+		if ( ! $coupon_id ) {
+			return new WP_Error(
+				'wcsc_coupon_not_created',
+				'Store credit coupon could not be created.'
+			);
+		}
+
 		// Mark the order as converted so it cannot generate another store credit coupon.
 		$order->update_meta_data( self::CONVERTED_COUPON_META_KEY, $coupon_id );
 		$order->save();

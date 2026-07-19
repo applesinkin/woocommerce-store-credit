@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $coupon_code = WCSC_Helper::trim_string( $args['coupon_code'] ?? '' );
 
 if ( empty( $coupon_code ) ) {
-    return;
+	return;
 }
 ?>
 

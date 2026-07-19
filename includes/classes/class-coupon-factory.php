@@ -27,9 +27,9 @@ class WCSC_Coupon_Factory {
 			);
 		}
 
-		$email = $order->get_billing_email();
+		$email = sanitize_email( $order->get_billing_email() );
 
-		if ( $email === '' ) {
+		if ( ! is_email( $email ) ) {
 			return new WP_Error(
 				'wcsc_missing_email',
 				'Order billing email is required to create store credit.'

@@ -46,7 +46,7 @@ class WCSC_Helper {
 			return;
 		}
 
-		include $resolved;
+		include $resolved; // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable
 	}
 
 	/**

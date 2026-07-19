@@ -26,6 +26,7 @@ require_once WCSC_PATH . 'includes/autoload.php';
 add_action(
 	'plugins_loaded',
 	static function (): void {
-		// Plugin bootstrapping will be added here in the next step.
+		$core = new WCSC_Core();
+		$core->init();
 	}
 );

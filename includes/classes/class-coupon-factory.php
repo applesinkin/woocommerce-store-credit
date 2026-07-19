@@ -13,19 +13,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Creates WooCommerce coupons from orders.
  */
 class WCSC_Coupon_Factory {
-	private const SOURCE_ORDER_META_KEY = '_wcsc_source_order_id';
+	private const CONVERTED_COUPON_META_KEY = '_wcsc_store_credit_coupon_id';
+	private const SOURCE_ORDER_META_KEY     = '_wcsc_source_order_id';
 
 	/**
 	 * Creates a single-use fixed cart coupon for the given order total.
 	 *
 	 * @param WC_Order $order Source order.
-	 * @return WC_Coupon
+	 * @return WC_Coupon|WP_Error
 	 */
-	public function create_for_order( WC_Order $order ): WC_Coupon {
+	public function create_for_order( WC_Order $order ) {
+		if ( $order->get_meta( self::CONVERTED_COUPON_META_KEY, true ) ) {
+			return new WP_Error(
+				'wcsc_already_converted',
+				'Order has already been converted to store credit.'
+			);
+		}
+
 		$email = $order->get_billing_email();
 
 		if ( $email === '' ) {
-			throw new InvalidArgumentException( 'Order billing email is required to create store credit.' );
+			return new WP_Error(
+				'wcsc_missing_email',
+				'Order billing email is required to create store credit.'
+			);
 		}
 
 		$coupon = new WC_Coupon();
@@ -37,7 +48,11 @@ class WCSC_Coupon_Factory {
 		$coupon->set_usage_limit_per_user( 1 );
 		$coupon->set_email_restrictions( array( $email ) );
 		$coupon->add_meta_data( self::SOURCE_ORDER_META_KEY, $order->get_id(), true );
-		$coupon->save();
+		$coupon_id = $coupon->save();
+
+		// Mark the order as converted so it cannot generate another store credit coupon.
+		$order->update_meta_data( self::CONVERTED_COUPON_META_KEY, $coupon_id );
+		$order->save();
 
 		return $coupon;
 	}

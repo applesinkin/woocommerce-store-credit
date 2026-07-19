@@ -1,6 +1,12 @@
 # WooCommerce Store Credit
 
-Minimal WordPress/WooCommerce plugin scaffold for a timed technical exercise.
-At this stage it only provides the plugin entry file and a small autoload layer.
-The Store Credit feature implementation will be added in the next step.
-Install by copying this folder to `wp-content/plugins` and activating it in WordPress.
+Adds a My Account order-details action that lets eligible customers convert a paid, non-refunded WooCommerce order into store credit.
+The plugin creates a single-use fixed-cart coupon for the order total and restricts it to the order billing email.
+
+## Installation
+
+1. Copy this folder to `wp-content/plugins/woocommerce-store-credit`.
+2. Activate **WooCommerce Store Credit** in WordPress.
+
+Each order stores the generated coupon ID in order meta, so the same order cannot be converted twice.
+The UI is split into small plugin partials and backend checks are repeated in the POST handler.

@@ -4,13 +4,19 @@
  *
  * @package WCSC
  *
- * @var int    $order_id
- * @var string $action_url
- * @var string $nonce
+ * @var array $args
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+$action_url = WCSC_Helper::trim_string( ['action_url'] ?? '' );
+$nonce      = WCSC_Helper::trim_string( $args['nonce'] ?? '' );
+$order_id   = absint( $args['order_id'] ?? 0 );
+
+if ( ! $action_url || ! $nonce || ! $order_id ) {
+    return;
 }
 ?>
 
